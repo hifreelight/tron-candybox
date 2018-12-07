@@ -11,8 +11,8 @@ const TronWeb = require('tronweb');
 const fullNode = 'https://api.shasta.trongrid.io';
 const solidityNode = 'https://api.shasta.trongrid.io';
 const eventServer = 'https://api.shasta.trongrid.io/';
-let privateKey = '24a1a7e24a956138b0abf0a47cee816bd7180762f2c7df7167925c8c12e8dc98';
-privateKey = '7b8b5c3b35c06b41279fa33b685383c4ecc5bedbb77533c20d47c0d3315ad3a6';
+let privateKey = '24a1a7e24a956138b0abf0a47cee816bd7180762f2c7df7167925c8c12e8dc98'; //dev
+privateKey = '7b8b5c3b35c06b41279fa33b685383c4ecc5bedbb77533c20d47c0d3315ad3a6'; //shasta
 
 const tronWeb = new TronWeb(
     fullNode,
@@ -20,11 +20,11 @@ const tronWeb = new TronWeb(
     eventServer,
     privateKey
 );
-let userAddress = 'TXAsg1x5Y6mnyx5Z3vsCRNRchMvKwJMUbs';
-// userAddress = '41E88F7FA07CAAFA03217383C575752D575D967933';
-// userAddress = 'THmwFbYo1eR8So1grmVjAQcTaeXSaUmNjP';
+let userAddress = 'TXAsg1x5Y6mnyx5Z3vsCRNRchMvKwJMUbs'; //dev
+// userAddress = 'THmwFbYo1eR8So1grmVjAQcTaeXSaUmNjP'; //shasta
 let contractAddress = 'TAkNDLcPm2LiExrn3uzWFTbXcLWqkR8tpi';
 // contractAddress = 'TMyMU5e8pSGZeyaGiEtjpMngT6gHevESsY';
+let toAddress = 'THmwFbYo1eR8So1grmVjAQcTaeXSaUmNjP';
 
 describe('A suite for tron', function() {
   it('test get', function() {
@@ -64,7 +64,7 @@ describe('A suite for tron', function() {
             .then(balance => {
                 tronWeb.setPrivateKey(privateKey);
                 console.log('contract balance is %o', parseInt(balance.balance._hex)/10e17);
-                token.transfer('TXAsg1x5Y6mnyx5Z3vsCRNRchMvKwJMUbs', 100)
+                token.transfer(toAddress, 100 * 10e5)
                     .send({
                         shouldPollResponse: true,
                         callValue: 0,
@@ -81,6 +81,10 @@ describe('A suite for tron', function() {
             });
       })
       .catch(err => console.error(err));
+  });
+  it('test transfer', function() {
+    tronWeb.setPrivateKey(privateKey);
+    tronWeb.transactionBuilder
   });
 
   it('test trigger', function() {
