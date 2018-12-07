@@ -1,0 +1,32 @@
+{
+  "name": "metacoin-box",
+  "version": "2.0.0",
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server -c ./bs-config.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup-dapp": "bash scripts/migrate-and-setup.sh"
+  },
+  "originalAuthors": "truffle-box",
+  "author": {
+    "name": "Francesco Sullo",
+    "email": "francesco@sullo.co"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "chalk": "^2.4.1",
+    "lite-server": "^2.4.0",
+    "sleep": "^5.2.3",
+    "eslint": "^3.7.0",
+    "eslint-config-loopback": "^4.0.0",
+    "expect": "^22.4.3",
+    "mocha": "^5.1.1",
+    "nsp": "^2.1.0"
+  },
+  "dependencies": {
+    "tronweb": "^2.1.14"
+  }
+}
