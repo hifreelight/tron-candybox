@@ -7,13 +7,14 @@ process.env.NODE_ENV = 'test';
 let debug = require('debug')('rand:test');
 let moment = require('moment');
 const TronWeb = require('tronweb');
+var BigNumber = require('bignumber.js');
 
 const fullNode = 'https://api.shasta.trongrid.io';
 const solidityNode = 'https://api.shasta.trongrid.io';
 const eventServer = 'https://api.shasta.trongrid.io/';
 let privateKey = '24a1a7e24a956138b0abf0a47cee816bd7180762f2c7df7167925c8c12e8dc98'; //dev
-privateKey = '7b8b5c3b35c06b41279fa33b685383c4ecc5bedbb77533c20d47c0d3315ad3a6'; //shasta
-
+// privateKey = '7b8b5c3b35c06b41279fa33b685383c4ecc5bedbb77533c20d47c0d3315ad3a6'; //shasta
+const fxt = 10e5;
 const tronWeb = new TronWeb(
     fullNode,
     solidityNode,
@@ -22,15 +23,17 @@ const tronWeb = new TronWeb(
 );
 let userAddress = 'TXAsg1x5Y6mnyx5Z3vsCRNRchMvKwJMUbs'; //dev
 // userAddress = 'THmwFbYo1eR8So1grmVjAQcTaeXSaUmNjP'; //shasta
-let contractAddress = 'TAkNDLcPm2LiExrn3uzWFTbXcLWqkR8tpi';
+let contractAddress = 'TAkNDLcPm2LiExrn3uzWFTbXcLWqkR8tpi'; //fxttoken
 // contractAddress = 'TMyMU5e8pSGZeyaGiEtjpMngT6gHevESsY';
 let toAddress = 'THmwFbYo1eR8So1grmVjAQcTaeXSaUmNjP';
 
 describe('A suite for tron', function() {
-  it('test get', function() {
+  this.timeout(1000*60*3);
+  it('test get', function(done) {
     tronWeb.trx.getBalance(userAddress)
       .then(userBalance => {
         console.log(userBalance);
+        done();
       });
   });
   /**
@@ -38,7 +41,7 @@ describe('A suite for tron', function() {
    * 411BE0DDCD2AEADE53FFD737DEBFA3CE97AD5BD706
    * https://www.tronscan.org/#/tools/tron-convert-tool
    */
-  it('test getContract', async function() {
+  it('test getContract', async function(done) {
     tronWeb.trx.getContract(contractAddress)
       .then(contract => {
         console.group('Contract from node');
@@ -63,8 +66,9 @@ describe('A suite for tron', function() {
             .call()            
             .then(balance => {
                 tronWeb.setPrivateKey(privateKey);
+                console.log('contract balance is %o', parseInt(balance.balance._hex));
                 console.log('contract balance is %o', parseInt(balance.balance._hex)/10e17);
-                token.transfer(toAddress, 100 * 10e5)
+                token.transfer(toAddress, new BigNumber(100).times(fxt).toNumber())
                     .send({
                         shouldPollResponse: true,
                         callValue: 0,
@@ -75,6 +79,7 @@ describe('A suite for tron', function() {
                             .call()
                             .then(b => {
                                 console.log('contract balance is %o', parseInt(b.balance._hex)/10e17);
+                                done();
                             })
                     })
                     .catch(err => console.error(err));

@@ -27,6 +27,7 @@
     "nsp": "^2.1.0"
   },
   "dependencies": {
+    "bignumber": "^v1.1.0",
     "tronweb": "^2.1.14"
   }
 }
