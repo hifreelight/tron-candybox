@@ -6,7 +6,7 @@ module.exports = {
       privateKey: // don't change this private key
       'da146374a75310b9666e834ee4ad0866d6f4035967bfc76217c5a495fff9f0d0',
       fullHost: "http://127.0.0.1:9090",
-      feeLimit: 1e8,
+      feeLimit: 2*1e8,
       userFeePercentage: 30,
       originEnergyLimit: 1e5,
       network_id: "*"

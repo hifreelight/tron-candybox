@@ -98,7 +98,7 @@ contract Owned {
 // ERC20 Token, with the addition of symbol, name and decimals and a
 // fixed supply
 // ----------------------------------------------------------------------------
-contract FxtToken is ERC20Interface, Owned {
+contract NenmoToken is ERC20Interface, Owned {
     using SafeMath for uint;
 
     string public symbol;
@@ -114,8 +114,8 @@ contract FxtToken is ERC20Interface, Owned {
     // Constructor
     // ------------------------------------------------------------------------
     constructor() public {
-        symbol = "FXT";
-        name = "Example Fxt Token";
+        symbol = "NENMO";
+        name = "Example NENMO Token";
         decimals = 6;
         _totalSupply = 1000000 * 10**uint(decimals);
         balances[owner] = _totalSupply;
