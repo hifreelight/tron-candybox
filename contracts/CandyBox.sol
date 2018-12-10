@@ -69,7 +69,7 @@ contract Owned {
     }
 }
 
-contract CandyBox is Owned{
+contract CandyBox is Owned {
     TRC20Interface public token;
     bool isPause;
     // Number of candy
@@ -97,7 +97,7 @@ contract CandyBox is Owned{
     mapping(uint => string) candyImageUrl;
     mapping(uint => string) candyBgUrl;
     mapping(uint => string) candyTitle;
-    mapping(uint => string) candyIntroduction;
+    mapping(uint => string) candyDesc;
     mapping(uint => string) candyLink;
 
     constructor() public {
@@ -109,16 +109,10 @@ contract CandyBox is Owned{
     struct Candy {
         address addr;
         string name;
-    }
-    function setToken(address t) public {
-        token = TRC20Interface(t);
-    }
+    }    
 
     function setPause(bool pause) public onlyOwner {
         isPause = pause;
-    }
-    function tokenTransfer(address _to, uint _amt) public onlyOwner {
-        token.transfer(_to,_amt);
     }
 
     function addCandy(
@@ -144,7 +138,7 @@ contract CandyBox is Owned{
         candyImageUrl[totalCandy] = imageUrl;
         candyBgUrl[totalCandy] = bgUrl;
         candyTitle[totalCandy] = title;
-        candyIntroduction[totalCandy] = introduction;
+        candyDesc[totalCandy] = introduction;
         candyLink[totalCandy] = link;
 
         totalCandy += 1;
@@ -174,7 +168,7 @@ contract CandyBox is Owned{
         candyImageUrl[totalCandy] = imageUrl;
         candyBgUrl[totalCandy] = bgUrl;
         candyTitle[totalCandy] = title;
-        candyIntroduction[totalCandy] = introduction;
+        candyDesc[totalCandy] = introduction;
         candyLink[totalCandy] = link;
 
     }
@@ -185,7 +179,7 @@ contract CandyBox is Owned{
 
     function editCandy(uint id, string memory name, string memory introduction, uint256 once) public onlyOwner() {
         candays[id].name = name;
-        candyIntroduction[id] = introduction;
+        candyDesc[id] = introduction;
         candyOnce[id] = once;
     }
     function editPubCandy(uint id, uint8 order, uint8 isDeleted) public onlyOwner() {
@@ -199,7 +193,21 @@ contract CandyBox is Owned{
             address,
             string memory,
             uint256,
-            uint,
+            uint256,
+            uint
+        ) {
+        return (
+            candays[id].addr,
+            candays[id].name,
+            candyTotal[id],
+            candyHasReceived[id],
+            candyOnce[id]
+        );
+    }
+    function getCandyDetail(uint _id)
+        public 
+        view 
+        returns (
             string memory,
             string memory,
             string memory,
@@ -209,17 +217,13 @@ contract CandyBox is Owned{
             uint8
         ) {
         return (
-            candays[id].addr,
-            candays[id].name,
-            candyTotal[id],
-            candyOnce[id],
-            candyImageUrl[id],
-            candyBgUrl[id],
-            candyTitle[id],
-            candyIntroduction[id],
-            candyLink[id],
-            candyIsDeleted[id],
-            candyOrder[id]
+            candyImageUrl[_id],
+            candyBgUrl[_id],
+            candyTitle[_id],
+            candyDesc[_id],
+            candyLink[_id],
+            candyIsDeleted[_id],
+            candyOrder[_id]
         );
     }
     function receive(uint id) public {

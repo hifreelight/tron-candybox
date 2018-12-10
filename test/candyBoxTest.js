@@ -5,7 +5,10 @@ var CandyBox = artifacts.require("./CandyBox.sol");
 var TokenTransfer = artifacts.require("./TokenTransfer.sol");
 const TronWeb = require('tronweb');
 var BigNumber = require('bignumber.js');
+const fxt = 1000000;
 
+const token;
+const instance;
 contract('CandyBox', function (accounts) {
 
     before(function () {
@@ -22,25 +25,40 @@ contract('CandyBox', function (accounts) {
     })
 
     it("should and one candy", async function(){
-        const token = await FxtToken.deployed();
-
-        // const instance = await CandyBox.deployed();
-        // await instance.addCandy(
-        //     token.address, 
-        //     '00000000000000000000000000000001', 
-        //     new BigNumber(1000).times(fxt).toNumber(), 
-        //     new BigNumber(1).times(fxt).toNumber(),
-        //     'https://zizaiv2.oss-cn-beijing.aliyuncs.com/bettown/teamlogo/nba/WashingtonWizards.png',
-        //     'https://zizaiv2.oss-cn-beijing.aliyuncs.com/bettown/teamlogo/nba/WashingtonWizards.png',
-        //     'title-hello',
-        //     'introduction',
-        //     'https://www.bet.town',
-        //     true,
-        //     10            
-        // )
-        // let candy = await instance.getCandy(1);
-        // console.log(candy);
-        // assert.equal(candy.address, token.address, 'candy address is error');
+        token = await FxtToken.deployed();
+        instance = await CandyBox.deployed();
+        await instance.addCandy(
+            token.address, 
+            '00000000000000000000000000000001', 
+            new BigNumber(1000).times(fxt).toNumber(), 
+            new BigNumber(1).times(fxt).toNumber(),
+            'https://zizaiv2.oss-cn-beijing.aliyuncs.com/bettown/teamlogo/nba/WashingtonWizards.png',
+            'https://zizaiv2.oss-cn-beijing.aliyuncs.com/bettown/teamlogo/nba/WashingtonWizards.png',
+            'title-hello',
+            'introduction',
+            'https://www.bet.town',
+            10            
+        )
+        let candy = await instance.getCandy(1);
+        let detail = await install.getCandyDetail(1);
+        console.log(candy);
+        assert.equal(candy[0], token.address, 'candy address is error');
 
     })
+    it("find left receive number", async function(){
+
+    })
+    it("lastReceiveTime", async function(){
+
+    })
+    it("transfer token", async function(){
+
+    })
+    it("receive", async function(){
+
+    })
+    it("find left receive number", async function(){
+
+    })
+
 });
