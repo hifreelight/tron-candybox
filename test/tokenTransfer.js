@@ -34,7 +34,15 @@ contract('FxtToken', function (accounts) {
     const instance = await FxtToken.deployed();
     console.log(instance.address);
     const transerInstance = await TokenTransfer.deployed(instance.address);
+    await transerInstance.setToken(instance.address)
     
+    await instance.approve(transerInstance.address, new BigNumber(100).times(fxt).toNumber(), {
+      from: accounts[0]
+    })
+    let allowance = await instance.allowance(accounts[0], transerInstance.address);
+    console.log('allowance is %o', parseInt(allowance.remaining._hex)/10e5);
+
+    //----------------------transfer-------------------------
     await instance.transfer(accounts[1], new BigNumber(100).times(fxt).toNumber(), {
       from: accounts[0]
     })
@@ -43,29 +51,29 @@ contract('FxtToken', function (accounts) {
       from: accounts[0]
     })
 
-    await transerInstance.tokenTransfer(accounts[0], new BigNumber(50).times(fxt).toNumber(), {
-      from: accounts[0]
+    await transerInstance.transfer(accounts[1], new BigNumber(50).times(fxt).toNumber(), {
+      from: transerInstance.address
     })
+    // await transerInstance.transferFrom(accounts[0], accounts[1], new BigNumber(50).times(fxt).toNumber(), {
+    //   from: accounts[2]
+    // })
+    await transerInstance.transfer(accounts[0], new BigNumber(50).times(fxt).toNumber())
 
     // await instance.transfer(accounts[0], new BigNumber(50).times(fxt).toNumber(), {
-    //   from: transerInstance.address
+    //   from: accounts[1]
     // })
-
-    await instance.transfer(accounts[0], new BigNumber(50).times(fxt).toNumber(), {
-      from: accounts[1]
-    })
-
+    // -------------- balance -----------------------
     let balance = await instance.balanceOf(accounts[0], {from: accounts[0]});
     balance = parseInt(balance.balance._hex)/10e5;
-    console.log(balance);
+    console.log('accounts[0] balance is %d', balance);
 
     let balance1 = await instance.balanceOf(accounts[1], {from: transerInstance.address});
     balance1 = parseInt(balance1.balance._hex)/10e5;
-    console.log(balance1);
+    console.log('accounts[1] balance is %d', balance1);
 
     let contractBalance = await instance.balanceOf(transerInstance.address, {from: transerInstance.address});
     contractBalance = parseInt(contractBalance.balance._hex)/10e5;
-    console.log(contractBalance);
+    console.log('contractBalance is %d', contractBalance);
   })
 
 });

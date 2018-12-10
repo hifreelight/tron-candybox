@@ -1,3 +1,5 @@
+pragma solidity ^0.4.23;
+
 // ----------------------------------------------------------------------------
 // Safe maths
 // ----------------------------------------------------------------------------
@@ -25,7 +27,7 @@ library SafeMath {
 // ERC Token Standard #20 Interface
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
 // ----------------------------------------------------------------------------
-contract ERC20Interface {
+contract TRC20Interface {
     function totalSupply() public view returns (uint);
     function balanceOf(address tokenOwner) public view returns (uint balance);
     function allowance(address tokenOwner, address spender) public view returns (uint remaining);
@@ -35,16 +37,6 @@ contract ERC20Interface {
 
     event Transfer(address indexed from, address indexed to, uint tokens);
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
-}
-
-
-// ----------------------------------------------------------------------------
-// Contract function to receive approval and execute function in one call
-//
-// Borrowed from MiniMeToken
-// ----------------------------------------------------------------------------
-contract ApproveAndCallFallBack {
-    function receiveApproval(address from, uint256 tokens, address token, bytes memory data) public;
 }
 
 
@@ -77,97 +69,135 @@ contract Owned {
     }
 }
 
-contract CandyBox is ERC20Interface, Owned{
-    ERC20Interface public token;
+contract CandyBox is Owned{
+    TRC20Interface public token;
+    bool isPause;
+    // Number of candy
     uint totalCandy;
+    // Maximum number of users available.
     uint maxReceiveNumber;
-    mapping(uint => Candy) candays;
+    // user has receive numbers
     mapping(address => uint) receiveNumbers;
+    // user last receive time
+    mapping(address => uint) receiveLastTime;
+
+    // candys
+    mapping(uint => Candy) candays;
+    // candy has been receive amount
+    mapping(uint => uint256) candyHasReceived;
+    // The user can receive total token of the candy  
+    mapping(uint => uint256) candyTotal;
+    // The order of the candy token, the numbers are big on the top
+    mapping(uint => uint8) candyOrder;
+    // Number of times each time
+    mapping(uint => uint256) candyOnce;
+    // Has it been deleted? 1 is deleted
+    mapping(uint => uint8) candyIsDeleted;
+
+    mapping(uint => string) candyImageUrl;
+    mapping(uint => string) candyBgUrl;
+    mapping(uint => string) candyTitle;
+    mapping(uint => string) candyIntroduction;
+    mapping(uint => string) candyLink;
+
     constructor() public {
-        totalCandy = 0;
+        totalCandy = 1;
         maxReceiveNumber = 2;
+        isPause = true;
     }
 
     struct Candy {
         address addr;
-        bytes32 name;
-        uint256 total;
-        uint once;
-        string imageUrl;
-        string bgUrl;
-        string title;
-        string introduction;
-        string link;
-        bool status;
-        uint8 order;
+        string name;
     }
     function setToken(address t) public {
-        token = ERC20Interface(t);
+        token = TRC20Interface(t);
     }
 
+    function setPause(bool pause) public onlyOwner {
+        isPause = pause;
+    }
     function tokenTransfer(address _to, uint _amt) public onlyOwner {
         token.transfer(_to,_amt);
     }
 
     function addCandy(
         address addr,
-        bytes32 name,
+        string memory name,
         uint256 total,
-        uint once,
+        uint256 once,
         string memory imageUrl,
         string memory bgUrl,
         string memory title,
         string memory introduction,
         string memory link,
-        bool status,
         uint8 order
     ) 
     public 
     onlyOwner
     {
-        candays[totalCandy] = Candy(addr, name, total, once, imageUrl, bgUrl, title, introduction, link, status, order);
+        candays[totalCandy] = Candy(addr, name);
+        candyTotal[totalCandy] = total;
+        candyOnce[totalCandy] = once;
+        candyOrder[totalCandy] = order;
+
+        candyImageUrl[totalCandy] = imageUrl;
+        candyBgUrl[totalCandy] = bgUrl;
+        candyTitle[totalCandy] = title;
+        candyIntroduction[totalCandy] = introduction;
+        candyLink[totalCandy] = link;
+
         totalCandy += 1;
     }
 
     function editCandy(
         uint id,
         address addr,
-        bytes32 name,
+        string memory name,
         uint256 total,
-        uint once,
+        uint256 once,
         string memory imageUrl,
         string memory bgUrl,
         string memory title,
         string memory introduction,
         string memory link,
-        bool status,
         uint8 order
     ) 
     public 
     onlyOwner
     {
-        candays[id] = Candy(addr, name, total, once, imageUrl, bgUrl, title, introduction, link, status, order);
+        candays[id] = Candy(addr, name);
+        candyTotal[totalCandy] = total;
+        candyOnce[totalCandy] = once;
+        candyOrder[totalCandy] = order;
+
+        candyImageUrl[totalCandy] = imageUrl;
+        candyBgUrl[totalCandy] = bgUrl;
+        candyTitle[totalCandy] = title;
+        candyIntroduction[totalCandy] = introduction;
+        candyLink[totalCandy] = link;
+
     }
 
     function delCandy(uint id) public onlyOwner {
-        delete candays[id];
+        candyIsDeleted[id] = 1;
     }
 
-    function editCandy(uint id, bytes32 name, string memory introduction, uint once) public onlyOwner() {
+    function editCandy(uint id, string memory name, string memory introduction, uint256 once) public onlyOwner() {
         candays[id].name = name;
-        candays[id].introduction = introduction;
-        candays[id].once = once;
+        candyIntroduction[id] = introduction;
+        candyOnce[id] = once;
     }
-    function editPubCandy(uint id, uint8 order, bool status) public onlyOwner() {
-        candays[id].order = order;
-        candays[id].status = status;
+    function editPubCandy(uint id, uint8 order, uint8 isDeleted) public onlyOwner() {
+        candyOrder[id] = order;
+        candyIsDeleted[id] = isDeleted;
     }
-    function getCandy(uint id) 
+    function getCandy(uint id)
         public 
         view 
         returns (
             address,
-            bytes32,
+            string memory,
             uint256,
             uint,
             string memory,
@@ -175,28 +205,31 @@ contract CandyBox is ERC20Interface, Owned{
             string memory,
             string memory,
             string memory,
-            bool,
+            uint8,
             uint8
         ) {
         return (
             candays[id].addr,
             candays[id].name,
-            candays[id].total,
-            candays[id].once,
-            candays[id].imageUrl,
-            candays[id].bgUrl,
-            candays[id].title,
-            candays[id].introduction,
-            candays[id].link,
-            candays[id].status,
-            candays[id].order
+            candyTotal[id],
+            candyOnce[id],
+            candyImageUrl[id],
+            candyBgUrl[id],
+            candyTitle[id],
+            candyIntroduction[id],
+            candyLink[id],
+            candyIsDeleted[id],
+            candyOrder[id]
         );
     }
     function receive(uint id) public {
+        require(isPause, 'Have pause');
         require(receiveNumbers[msg.sender] < 2, 'Have already received twice');
-        receiveNumbers[msg.sender] += 1;
+        require(candyTotal[id]- candyHasReceived[id] - candyOnce[id] >= 0, 'Candy super hair');
         Candy memory candy = candays[id];
-        setToken(candy.addr);
-        token.transfer(msg.sender, candy.once);
+        receiveNumbers[msg.sender] += 1;
+        receiveLastTime[msg.sender] = now;
+        TRC20Interface t = TRC20Interface(candy.addr);
+        t.transfer(msg.sender, candyOnce[id]);
     }
 }

@@ -7,9 +7,9 @@ module.exports = {
       'da146374a75310b9666e834ee4ad0866d6f4035967bfc76217c5a495fff9f0d0',
       // fullHost: "http://127.0.0.1:9090",
       fullHost: "http://39.106.132.95:9090",
-      feeLimit: 2*1e8,
+      feeLimit: 3*1e8,
       userFeePercentage: 30,
-      originEnergyLimit: 1e5,
+      originEnergyLimit: 3*1e5,
       network_id: "*"
     },
 

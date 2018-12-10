@@ -1,23 +1,36 @@
 pragma solidity ^0.4.23;
 
-contract token { 
-    function transfer(address receiver, uint amount) public { 
-        receiver; 
-        amount; 
-    } 
-} //transfer方法的接口说明
+contract ERC20Interface {
+    function totalSupply() public view returns (uint);
+    function balanceOf(address tokenOwner) public view returns (uint balance);
+    function allowance(address tokenOwner, address spender) public view returns (uint remaining);
+    function transfer(address to, uint tokens) public returns (bool success);
+    function approve(address spender, uint tokens) public returns (bool success);
+    function transferFrom(address from, address to, uint tokens) public returns (bool success);
+
+    event Transfer(address indexed from, address indexed to, uint tokens);
+    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
+}
+
 contract TokenTransfer{
-    token public wowToken;
+    ERC20Interface public token;
     
     constructor(address addr) public {
-       wowToken = token(addr); //实例化一个token
+       token = ERC20Interface(addr); //实例化一个token
     }
 
     function setToken(address t) public {
-        wowToken = token(t);
+        token = ERC20Interface(t);
     }
 
-    function tokenTransfer(address _to, uint _amt) public {
-        wowToken.transfer(_to,_amt); //调用token的transfer方法
+    function transfer(address _to, uint _amt) public returns (bool success){
+        return token.transfer(_to,_amt);
+    }
+    function transferFrom(address _from, address _to, uint _amt) public returns (bool success){
+        return token.transferFrom(_from, _to, _amt);
+    }
+
+    function allowance(address tokenOwner, address spender) public view returns (uint remaining){
+        return token.allowance(tokenOwner, spender);
     }
 }
