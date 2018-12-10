@@ -31,3 +31,9 @@ Running migration: 5_deploy_contracts.js
     (hex) 41088a68682b5079fa14a176f5eab349557b386866
 https://api.shasta.trongrid.io/wallet/getcontract?value=41088a68682b5079fa14a176f5eab349557b386866    
 ```
+
+
+
+```shell
+curl http://39.106.132.95:8090/admin/accounts
+```
