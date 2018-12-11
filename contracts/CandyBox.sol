@@ -233,7 +233,19 @@ contract CandyBox is Owned {
         Candy memory candy = candays[id];
         receiveNumbers[msg.sender] += 1;
         receiveLastTime[msg.sender] = now;
+        candyHasReceived[id] = candyHasReceived[id] + candyOnce[id];
         TRC20Interface t = TRC20Interface(candy.addr);
         t.transfer(msg.sender, candyOnce[id]);
     }
+
+    function maxNumbers() public view returns (uint number){
+        return maxReceiveNumber;
+    }
+    function myNumbers(address addr) public view returns (uint number){
+        return receiveNumbers[addr];
+    }
+    function myLastTime(address addr) public view returns (uint time){
+        return receiveLastTime[addr];
+    }
+    
 }

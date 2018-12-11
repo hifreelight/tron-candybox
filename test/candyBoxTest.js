@@ -7,8 +7,8 @@ const TronWeb = require('tronweb');
 var BigNumber = require('bignumber.js');
 const fxt = 1000000;
 
-const token;
-const instance;
+let token;
+let instance;
 contract('CandyBox', function (accounts) {
 
     before(function () {
@@ -40,25 +40,53 @@ contract('CandyBox', function (accounts) {
             10            
         )
         let candy = await instance.getCandy(1);
-        let detail = await install.getCandyDetail(1);
-        console.log(candy);
+        let detail = await instance.getCandyDetail(1);
+        console.log('candy is %o', candy);
+        console.log('detail is %o', detail);
         assert.equal(candy[0], token.address, 'candy address is error');
 
     })
+    it("transfer token to contract", async function(){
+        await token.transfer(instance.address, new BigNumber(100).times(fxt).toNumber(), {
+            from: accounts[0]
+          })
+    })
+    it("find maxNumbers", async function(){
+        const maxNubers = await instance.maxNumbers();
+        console.log('maxNubers is %o', maxNubers);
+        // assert.equal(maxNubers, 2, 'maxNubers should 2');
+    })
     it("find left receive number", async function(){
-
+        const myNumbers = await instance.myNumbers(accounts[0]);
+        console.log('myNumbers is %o', myNumbers);
+        // assert.equal(maxNubers, 2, 'maxNubers should 2');
     })
     it("lastReceiveTime", async function(){
-
-    })
-    it("transfer token", async function(){
-
+        const lastReceiveTime = await instance.myLastTime(accounts[0]);
+        console.log('lastReceiveTime is %o', lastReceiveTime);
     })
     it("receive", async function(){
-
+        try{
+            const result = await instance.receive(1);
+            console.log(result);
+        }catch(err){
+            console.error(err);
+        }
     })
+
     it("find left receive number", async function(){
-
+        const myNumbers = await instance.myNumbers(accounts[0]);
+        console.log('myNumbers is %o', myNumbers);
     })
-
+    it("candy detail", async function(){
+        let candy = await instance.getCandy(1);
+        let detail = await instance.getCandyDetail(1);
+        console.log('candy is %o', candy);
+        console.log('detail is %o', detail);
+    })
+    it("contrac balance", async function(){
+        let contractBalance = await token.balanceOf(instance.address, {from: instance.address});
+        contractBalance = parseInt(contractBalance.balance._hex)/10e5;
+        console.log('contractBalance is %d', contractBalance);
+    })
 });
