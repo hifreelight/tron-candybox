@@ -28,7 +28,7 @@ let contractAddress = 'TAkNDLcPm2LiExrn3uzWFTbXcLWqkR8tpi'; //fxttoken
 let toAddress = 'THmwFbYo1eR8So1grmVjAQcTaeXSaUmNjP';
 
 describe('A suite for tron', function() {
-  this.timeout(1000*60*3);
+  this.timeout(1000 * 60 * 3);
   it('test get', function(done) {
     tronWeb.trx.getBalance(userAddress)
       .then(userBalance => {
@@ -49,38 +49,37 @@ describe('A suite for tron', function() {
         console.log('- Origin Address:', contract.origin_address);
         // console.log('- Bytecode:', contract.bytecode);
         // console.log('- ABI:\n' + JSON.stringify(contract.abi, null, 2), '\n');
-        console.groupEnd();            
+        console.groupEnd();
         return contract;
       })
       .then(contract => {
-        
         return contract;
       })
       .then(contract => {
         let abi = contract.abi.entrys;
         // console.log('abi is %j', abi);
         // abi = [{ 'constant': false, 'inputs': [{ 'name': 'key', 'type': 'uint256' }, { 'name': 'value', 'type': 'uint256' }], 'name': 'set', 'outputs': [], 'payable': false, 'stateMutability': 'nonpayable', 'type': 'function' }, { 'constant': true, 'inputs': [{ 'name': 'key', 'type': 'uint256' }], 'name': 'get', 'outputs': [{ 'name': 'value', 'type': 'uint256' }], 'payable': false, 'stateMutability': 'view', 'type': 'function' }];
-        abi = [{"outputs":[{"type":"string"}],"constant":true,"name":"name","stateMutability":"View","type":"Function"},{"outputs":[{"type":"uint8"}],"constant":true,"name":"decimals","stateMutability":"View","type":"Function"},{"name":"acceptOwnership","stateMutability":"Nonpayable","type":"Function"},{"outputs":[{"type":"address"}],"constant":true,"name":"owner","stateMutability":"View","type":"Function"},{"outputs":[{"type":"string"}],"constant":true,"name":"symbol","stateMutability":"View","type":"Function"},{"outputs":[{"type":"address"}],"constant":true,"name":"newOwner","stateMutability":"View","type":"Function"},{"inputs":[{"name":"_newOwner","type":"address"}],"name":"transferOwnership","stateMutability":"Nonpayable","type":"Function"},{"stateMutability":"Nonpayable","type":"Constructor"},{"payable":true,"stateMutability":"Payable","type":"Fallback"},{"inputs":[{"indexed":true,"name":"_from","type":"address"},{"indexed":true,"name":"_to","type":"address"}],"name":"OwnershipTransferred","type":"Event"},{"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"Transfer","type":"Event"},{"inputs":[{"indexed":true,"name":"tokenOwner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"name":"tokens","type":"uint256"}],"name":"Approval","type":"Event"},{"outputs":[{"type":"uint256"}],"constant":true,"name":"totalSupply","stateMutability":"View","type":"Function"},{"outputs":[{"name":"balance","type":"uint256"}],"constant":true,"inputs":[{"name":"tokenOwner","type":"address"}],"name":"balanceOf","stateMutability":"View","type":"Function"},{"outputs":[{"name":"success","type":"bool"}],"inputs":[{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transfer","stateMutability":"Nonpayable","type":"Function"},{"outputs":[{"name":"success","type":"bool"}],"inputs":[{"name":"spender","type":"address"},{"name":"tokens","type":"uint256"}],"name":"approve","stateMutability":"Nonpayable","type":"Function"},{"outputs":[{"name":"success","type":"bool"}],"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transferFrom","stateMutability":"Nonpayable","type":"Function"},{"outputs":[{"name":"remaining","type":"uint256"}],"constant":true,"inputs":[{"name":"tokenOwner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","stateMutability":"View","type":"Function"},{"outputs":[{"name":"success","type":"bool"}],"inputs":[{"name":"spender","type":"address"},{"name":"tokens","type":"uint256"},{"name":"data","type":"bytes"}],"name":"approveAndCall","stateMutability":"Nonpayable","type":"Function"},{"outputs":[{"name":"success","type":"bool"}],"inputs":[{"name":"tokenAddress","type":"address"},{"name":"tokens","type":"uint256"}],"name":"transferAnyERC20Token","stateMutability":"Nonpayable","type":"Function"}];
+        abi = [{ 'outputs': [{ 'type': 'string' }], 'constant': true, 'name': 'name', 'stateMutability': 'View', 'type': 'Function' }, { 'outputs': [{ 'type': 'uint8' }], 'constant': true, 'name': 'decimals', 'stateMutability': 'View', 'type': 'Function' }, { 'name': 'acceptOwnership', 'stateMutability': 'Nonpayable', 'type': 'Function' }, { 'outputs': [{ 'type': 'address' }], 'constant': true, 'name': 'owner', 'stateMutability': 'View', 'type': 'Function' }, { 'outputs': [{ 'type': 'string' }], 'constant': true, 'name': 'symbol', 'stateMutability': 'View', 'type': 'Function' }, { 'outputs': [{ 'type': 'address' }], 'constant': true, 'name': 'newOwner', 'stateMutability': 'View', 'type': 'Function' }, { 'inputs': [{ 'name': '_newOwner', 'type': 'address' }], 'name': 'transferOwnership', 'stateMutability': 'Nonpayable', 'type': 'Function' }, { 'stateMutability': 'Nonpayable', 'type': 'Constructor' }, { 'payable': true, 'stateMutability': 'Payable', 'type': 'Fallback' }, { 'inputs': [{ 'indexed': true, 'name': '_from', 'type': 'address' }, { 'indexed': true, 'name': '_to', 'type': 'address' }], 'name': 'OwnershipTransferred', 'type': 'Event' }, { 'inputs': [{ 'indexed': true, 'name': 'from', 'type': 'address' }, { 'indexed': true, 'name': 'to', 'type': 'address' }, { 'name': 'tokens', 'type': 'uint256' }], 'name': 'Transfer', 'type': 'Event' }, { 'inputs': [{ 'indexed': true, 'name': 'tokenOwner', 'type': 'address' }, { 'indexed': true, 'name': 'spender', 'type': 'address' }, { 'name': 'tokens', 'type': 'uint256' }], 'name': 'Approval', 'type': 'Event' }, { 'outputs': [{ 'type': 'uint256' }], 'constant': true, 'name': 'totalSupply', 'stateMutability': 'View', 'type': 'Function' }, { 'outputs': [{ 'name': 'balance', 'type': 'uint256' }], 'constant': true, 'inputs': [{ 'name': 'tokenOwner', 'type': 'address' }], 'name': 'balanceOf', 'stateMutability': 'View', 'type': 'Function' }, { 'outputs': [{ 'name': 'success', 'type': 'bool' }], 'inputs': [{ 'name': 'to', 'type': 'address' }, { 'name': 'tokens', 'type': 'uint256' }], 'name': 'transfer', 'stateMutability': 'Nonpayable', 'type': 'Function' }, { 'outputs': [{ 'name': 'success', 'type': 'bool' }], 'inputs': [{ 'name': 'spender', 'type': 'address' }, { 'name': 'tokens', 'type': 'uint256' }], 'name': 'approve', 'stateMutability': 'Nonpayable', 'type': 'Function' }, { 'outputs': [{ 'name': 'success', 'type': 'bool' }], 'inputs': [{ 'name': 'from', 'type': 'address' }, { 'name': 'to', 'type': 'address' }, { 'name': 'tokens', 'type': 'uint256' }], 'name': 'transferFrom', 'stateMutability': 'Nonpayable', 'type': 'Function' }, { 'outputs': [{ 'name': 'remaining', 'type': 'uint256' }], 'constant': true, 'inputs': [{ 'name': 'tokenOwner', 'type': 'address' }, { 'name': 'spender', 'type': 'address' }], 'name': 'allowance', 'stateMutability': 'View', 'type': 'Function' }, { 'outputs': [{ 'name': 'success', 'type': 'bool' }], 'inputs': [{ 'name': 'spender', 'type': 'address' }, { 'name': 'tokens', 'type': 'uint256' }, { 'name': 'data', 'type': 'bytes' }], 'name': 'approveAndCall', 'stateMutability': 'Nonpayable', 'type': 'Function' }, { 'outputs': [{ 'name': 'success', 'type': 'bool' }], 'inputs': [{ 'name': 'tokenAddress', 'type': 'address' }, { 'name': 'tokens', 'type': 'uint256' }], 'name': 'transferAnyERC20Token', 'stateMutability': 'Nonpayable', 'type': 'Function' }];
         const token = tronWeb.contract(abi, contractAddress);
         token.balanceOf(userAddress)
-            .call()            
+            .call()
             .then(balance => {
-                tronWeb.setPrivateKey(privateKey);
-                console.log('contract balance is %o', parseInt(balance.balance._hex));
-                console.log('contract balance is %o', parseInt(balance.balance._hex)/10e17);
-                token.transfer(toAddress, new BigNumber(100).times(fxt).toNumber())
+              tronWeb.setPrivateKey(privateKey);
+              console.log('contract balance is %o', parseInt(balance.balance._hex));
+              console.log('contract balance is %o', parseInt(balance.balance._hex) / 10e17);
+              token.transfer(toAddress, new BigNumber(100).times(fxt).toNumber())
                     .send({
-                        shouldPollResponse: true,
-                        callValue: 0,
+                      shouldPollResponse: true,
+                      callValue: 0,
                     })
                     .then(response => {
-                        console.log(response);
-                        token.balanceOf(userAddress)
+                      console.log(response);
+                      token.balanceOf(userAddress)
                             .call()
                             .then(b => {
-                                console.log('contract balance is %o', parseInt(b.balance._hex)/10e17);
-                                done();
-                            })
+                              console.log('contract balance is %o', parseInt(b.balance._hex) / 10e17);
+                              done();
+                            });
                     })
                     .catch(err => console.error(err));
             });
@@ -89,7 +88,7 @@ describe('A suite for tron', function() {
   });
   it('test transfer', function() {
     tronWeb.setPrivateKey(privateKey);
-    tronWeb.transactionBuilder
+    tronWeb.transactionBuilder;
   });
 
   it('test trigger', function() {

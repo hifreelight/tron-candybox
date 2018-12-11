@@ -42,3 +42,8 @@ curl http://39.106.132.95:8090/admin/accounts
 ```
 [ui](https://lanhuapp.com/url/f2QxV)
 ```
+
+## TODO
+- 用户等级
+- 黑名单
+- 领取次数恢复
