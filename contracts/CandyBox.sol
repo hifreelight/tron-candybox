@@ -70,16 +70,37 @@ contract Owned {
 }
 
 contract CandyBox is Owned {
+    /*
+    * checks only candyManager address is calling
+    */
+    modifier onlyCandyManager {
+        require(
+            msg.sender == roleCandyManager ||
+            msg.sender == owner
+        ,"Only owner can do this");
+        _;
+    }
+    address public roleCandyManager;
+
     TRC20Interface public token;
     bool isPause;
     // Number of candy
-    uint totalCandy;
+    uint public candyIdIndex_;
     // Maximum number of users available.
     uint maxReceiveNumber;
+    // recovery limit time 3600 second
+    uint recoveryLimitTime;
     // user has receive numbers
     mapping(address => uint) receiveNumbers;
     // user last receive time
     mapping(address => uint) receiveLastTime;
+    // use left receive nubers, one hour recovery one
+    mapping(address => uint) leftReceiveNumbers;
+    // Less than one hour recovery time , second
+    mapping(address => uint) leftRecoveryTime;
+    // user blacklist
+    mapping(address => uint) blacklist;
+
 
     // candys
     mapping(uint => Candy) candays;
@@ -101,9 +122,11 @@ contract CandyBox is Owned {
     mapping(uint => string) candyLink;
 
     constructor() public {
-        totalCandy = 1;
+        candyIdIndex_ = 1;
         maxReceiveNumber = 2;
+        recoveryLimitTime = 3600;
         isPause = true;
+        roleCandyManager = msg.sender;
     }
 
     struct Candy {
@@ -113,6 +136,10 @@ contract CandyBox is Owned {
 
     function setPause(bool pause) public onlyOwner {
         isPause = pause;
+    }
+
+    function setCandyManager(address addr) public onlyOwner {
+        roleCandyManager = addr;
     }
 
     function addCandy(
@@ -128,20 +155,20 @@ contract CandyBox is Owned {
         uint8 order
     ) 
     public 
-    onlyOwner
+    onlyCandyManager
     {
-        candays[totalCandy] = Candy(addr, name);
-        candyTotal[totalCandy] = total;
-        candyOnce[totalCandy] = once;
-        candyOrder[totalCandy] = order;
+        candays[candyIdIndex_] = Candy(addr, name);
+        candyTotal[candyIdIndex_] = total;
+        candyOnce[candyIdIndex_] = once;
+        candyOrder[candyIdIndex_] = order;
 
-        candyImageUrl[totalCandy] = imageUrl;
-        candyBgUrl[totalCandy] = bgUrl;
-        candyTitle[totalCandy] = title;
-        candyDesc[totalCandy] = introduction;
-        candyLink[totalCandy] = link;
+        candyImageUrl[candyIdIndex_] = imageUrl;
+        candyBgUrl[candyIdIndex_] = bgUrl;
+        candyTitle[candyIdIndex_] = title;
+        candyDesc[candyIdIndex_] = introduction;
+        candyLink[candyIdIndex_] = link;
 
-        totalCandy += 1;
+        candyIdIndex_ += 1;
     }
 
     function editCandy(
@@ -158,31 +185,31 @@ contract CandyBox is Owned {
         uint8 order
     ) 
     public 
-    onlyOwner
+    onlyCandyManager
     {
         candays[id] = Candy(addr, name);
-        candyTotal[totalCandy] = total;
-        candyOnce[totalCandy] = once;
-        candyOrder[totalCandy] = order;
+        candyTotal[candyIdIndex_] = total;
+        candyOnce[candyIdIndex_] = once;
+        candyOrder[candyIdIndex_] = order;
 
-        candyImageUrl[totalCandy] = imageUrl;
-        candyBgUrl[totalCandy] = bgUrl;
-        candyTitle[totalCandy] = title;
-        candyDesc[totalCandy] = introduction;
-        candyLink[totalCandy] = link;
+        candyImageUrl[candyIdIndex_] = imageUrl;
+        candyBgUrl[candyIdIndex_] = bgUrl;
+        candyTitle[candyIdIndex_] = title;
+        candyDesc[candyIdIndex_] = introduction;
+        candyLink[candyIdIndex_] = link;
 
     }
 
-    function delCandy(uint id) public onlyOwner {
+    function delCandy(uint id) public onlyCandyManager {
         candyIsDeleted[id] = 1;
     }
 
-    function editCandy(uint id, string memory name, string memory introduction, uint256 once) public onlyOwner() {
+    function editCandy(uint id, string memory name, string memory introduction, uint256 once) public onlyCandyManager() {
         candays[id].name = name;
         candyDesc[id] = introduction;
         candyOnce[id] = once;
     }
-    function editPubCandy(uint id, uint8 order, uint8 isDeleted) public onlyOwner() {
+    function editPubCandy(uint id, uint8 order, uint8 isDeleted) public onlyCandyManager() {
         candyOrder[id] = order;
         candyIsDeleted[id] = isDeleted;
     }
@@ -226,26 +253,68 @@ contract CandyBox is Owned {
             candyOrder[_id]
         );
     }
-    function receive(uint id) public {
+    // User click and  receive the candy.
+    function receive(uint id) public payable {
+        require(!inBlacklist(msg.sender), 'In blacklist');
+        require(canReceive(msg.sender), 'In blacklist');
         require(isPause, 'Have pause');
-        require(receiveNumbers[msg.sender] < 2, 'Have already received twice');
+        require(candyIsDeleted[id] < 1, 'Have delete');
+        // require(receiveNumbers[msg.sender] < 2, 'Have already received twice');
         require(candyTotal[id]- candyHasReceived[id] - candyOnce[id] >= 0, 'Candy super hair');
+        
+        
         Candy memory candy = candays[id];
         receiveNumbers[msg.sender] += 1;
         receiveLastTime[msg.sender] = now;
+        uint lrn = (leftReceiveNumbers[msg.sender] + (now - receiveLastTime[msg.sender] + leftRecoveryTime[msg.sender]) / recoveryLimitTime) - 1;
+        leftReceiveNumbers[msg.sender] = lrn < maxReceiveNumber - 1 ? lrn : maxReceiveNumber - 1 ;
+        leftRecoveryTime[msg.sender] = recoveryLimitTime - (now - receiveLastTime[msg.sender] + leftRecoveryTime[msg.sender]) % recoveryLimitTime;
         candyHasReceived[id] = candyHasReceived[id] + candyOnce[id];
         TRC20Interface t = TRC20Interface(candy.addr);
         t.transfer(msg.sender, candyOnce[id]);
     }
-
+    // Retrieve candy
+    function transferCandy(address _token, address _to, uint256 _amount) public onlyCandyManager returns (bool success){
+        TRC20Interface t = TRC20Interface(_token);
+        t.transfer(_to, _amount);
+        return true;
+    }
+    // Total candys in the box.
+    function total() public view returns (uint number){
+        return candyIdIndex_;
+    }
     function maxNumbers() public view returns (uint number){
         return maxReceiveNumber;
     }
+    // User has receive candy numbers.
     function myNumbers(address addr) public view returns (uint number){
         return receiveNumbers[addr];
     }
     function myLastTime(address addr) public view returns (uint time){
         return receiveLastTime[addr];
     }
-    
+    // User last receive info.
+    function myLastReceive(address addr) public view returns (uint num, uint time, uint left){
+        return (leftReceiveNumbers[addr], receiveLastTime[addr], leftRecoveryTime[addr]);
+    }
+    // Add some user to blacklist
+    function addBlacklist(address addr) public onlyCandyManager {
+        blacklist[addr] = 1;
+    }
+    // Delete user from blacklist
+    function delBlacklist(address addr) public onlyCandyManager {
+        delete blacklist[addr];
+    }
+
+    function inBlacklist(address addr) public view returns (bool isin) {
+        return blacklist[addr] > 0;
+    }
+
+    function canReceive(address addr) public returns (bool can) {
+        if((leftReceiveNumbers[addr] + (now - receiveLastTime[addr] + leftRecoveryTime[addr]) / recoveryLimitTime) > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

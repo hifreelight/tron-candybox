@@ -42,5 +42,12 @@ describe('A suite for FxtToken', function() {
     contractBalance = parseInt(contractBalance.balance._hex) / 10e5;
     console.log('contractBalance is %d', contractBalance);
   });
+  it('test contract name and symbol', async function() {
+    let symbol = await contract.symbol.call().call();
+    let name = await contract.name.call().call();
+    console.log('contract name is %o', name);
+    console.log('contract symbol is %o', symbol);
+    // assert.equal(symbol, 'FXT', 'contract symbol error');
+  });
 }
 );
