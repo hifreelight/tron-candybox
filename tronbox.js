@@ -6,11 +6,11 @@ module.exports = {
       privateKey: // don't change this private key
       'da146374a75310b9666e834ee4ad0866d6f4035967bfc76217c5a495fff9f0d0',
       // fullHost: "http://127.0.0.1:9090",
-      fullHost: "http://39.106.132.95:9090",
-      feeLimit: 3*1e8,
+      fullHost: 'http://39.106.132.95:9090',
+      feeLimit: 3 * 1e8,
       userFeePercentage: 30,
-      originEnergyLimit: 3*1e5,
-      network_id: "*"
+      originEnergyLimit: 3 * 1e5,
+      network_id: '*',
     },
 
 // TronGrid Shasta testnet
@@ -24,11 +24,11 @@ module.exports = {
       // and paste your address in the field at the bottom of the page
 
       consume_user_resource_percent: 30,
-      fullHost: "https://api.shasta.trongrid.io",
-      feeLimit: 2*1e8,
+      fullHost: 'https://api.shasta.trongrid.io',
+      feeLimit: 3 * 1e8,
       userFeePercentage: 30,
-      originEnergyLimit: 1e5,
-      network_id: "*"
-    }
-  }
-}
+      originEnergyLimit: 3 * 1e5,
+      network_id: '*',
+    },
+  },
+};

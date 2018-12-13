@@ -88,7 +88,7 @@ describe('A suite for tron', function() {
   });
   it('test transfer', function() {
     tronWeb.setPrivateKey(privateKey);
-    tronWeb.transactionBuilder;
+    // tronWeb.transactionBuilder;
   });
 
   it('test trigger', function() {
@@ -111,6 +111,6 @@ describe('A suite for tron', function() {
   });
 
   it('test listen', function() {
-    startEventListener;
+    // startEventListener;
   });
 });

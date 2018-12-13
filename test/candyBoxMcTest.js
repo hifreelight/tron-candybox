@@ -70,4 +70,8 @@ describe('A suite for candybox', function() {
     const lastReceiveTime = await contract.myLastTime(accountOwner.address).call();
     console.log('lastReceiveTime is %o', lastReceiveTime);
   });
+  it('test my receive info', async function() {
+    const info = await contract.myLastReceive(accountOwner.address).call();
+    console.log('myLastReceive info is %o', info);
+  });
 });

@@ -256,19 +256,19 @@ contract CandyBox is Owned {
     // User click and  receive the candy.
     function receive(uint id) public payable {
         require(!inBlacklist(msg.sender), 'In blacklist');
-        require(canReceive(msg.sender), 'In blacklist');
+        require(canReceive(msg.sender), 'should wait one hour');
         require(isPause, 'Have pause');
         require(candyIsDeleted[id] < 1, 'Have delete');
-        // require(receiveNumbers[msg.sender] < 2, 'Have already received twice');
         require(candyTotal[id]- candyHasReceived[id] - candyOnce[id] >= 0, 'Candy super hair');
         
         
         Candy memory candy = candays[id];
         receiveNumbers[msg.sender] += 1;
-        receiveLastTime[msg.sender] = now;
         uint lrn = (leftReceiveNumbers[msg.sender] + (now - receiveLastTime[msg.sender] + leftRecoveryTime[msg.sender]) / recoveryLimitTime) - 1;
+        lrn = lrn < 0 ? 0: lrn;
         leftReceiveNumbers[msg.sender] = lrn < maxReceiveNumber - 1 ? lrn : maxReceiveNumber - 1 ;
         leftRecoveryTime[msg.sender] = recoveryLimitTime - (now - receiveLastTime[msg.sender] + leftRecoveryTime[msg.sender]) % recoveryLimitTime;
+        receiveLastTime[msg.sender] = now;
         candyHasReceived[id] = candyHasReceived[id] + candyOnce[id];
         TRC20Interface t = TRC20Interface(candy.addr);
         t.transfer(msg.sender, candyOnce[id]);
@@ -310,11 +310,7 @@ contract CandyBox is Owned {
         return blacklist[addr] > 0;
     }
 
-    function canReceive(address addr) public returns (bool can) {
-        if((leftReceiveNumbers[addr] + (now - receiveLastTime[addr] + leftRecoveryTime[addr]) / recoveryLimitTime) > 0){
-            return true;
-        }else{
-            return false;
-        }
+    function canReceive(address addr) public view returns (bool can) {
+        return (leftReceiveNumbers[addr] + (now - receiveLastTime[addr] + leftRecoveryTime[addr]) / recoveryLimitTime) > 0;
     }
 }

@@ -61,10 +61,6 @@ contract('CandyBox', function(accounts) {
     console.log('myNumbers is %o', myNumbers);
         // assert.equal(maxNubers, 2, 'maxNubers should 2');
   });
-  it('lastReceiveTime', async function() {
-    const lastReceiveTime = await instance.myLastTime(accounts[0]);
-    console.log('lastReceiveTime is %o', lastReceiveTime);
-  });
   it('receive', async function() {
     try {
       const result = await instance.receive(1);
@@ -73,8 +69,12 @@ contract('CandyBox', function(accounts) {
       console.error(err);
     }
   });
+  it('lastReceiveTime', async function() {
+    const lastReceiveTime = await instance.myLastTime(accounts[0]);
+    console.log('lastReceiveTime is %o', lastReceiveTime);
+  });
 
-  it('find left receive number', async function() {
+  it('find user has receive candy numbers', async function() {
     const myNumbers = await instance.myNumbers(accounts[0]);
     console.log('myNumbers is %o', myNumbers);
   });
