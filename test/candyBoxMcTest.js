@@ -74,4 +74,16 @@ describe('A suite for candybox', function() {
     const info = await contract.myLastReceive(accountOwner.address).call();
     console.log('myLastReceive info is %o', info);
   });
+  it('test candy index', async function() {
+    const index = await contract.candyIdIndex_.call().call();
+    console.log('candyIndex is %o', index);
+  });
+  it('test candy transfer', async function() {
+    const index = await contract.transferCandy(fxttoken.networks['*'].address, accountOwner.address, new BigNumber(10).times(fxt).toNumber())
+      .send({
+        shouldPollResponse: true,
+        callValue: 0,
+      });
+    console.log('candyIndex is %o', index);
+  });
 });
