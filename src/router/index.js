@@ -8,6 +8,7 @@ import Web3Message from '@/components/sections/Web3Message.vue'
 import Roller from '@/components/Roller'
 import RollerRank from '@/components/sections/RollerRank.vue'
 import AdminNbaTron from '@/components/AdminNbaTron'
+import CandyList from '@/components/CandyList'
 
 Vue.use(Router)
 
@@ -54,6 +55,12 @@ export default new Router({
       path: '/admin/',
       name: 'AdminNbaTron',
       component: AdminNbaTron,
+      meta: { view: Web3Message }
+    },
+    {
+      path: '/admin/candy/list/',
+      name: 'CandyList',
+      component: CandyList,
       meta: { view: Web3Message }
     }
   ]
