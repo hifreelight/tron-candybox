@@ -106,7 +106,7 @@ contract CandyBox is Owned {
     mapping(uint => Candy) candays;
     // candy has been receive amount
     mapping(uint => uint256) candyHasReceived;
-    // The user can receive total token of the candy  
+    // The user can receive total token of the candy
     mapping(uint => uint256) candyTotal;
     // The order of the candy token, the numbers are big on the top
     mapping(uint => uint8) candyOrder;
@@ -132,7 +132,7 @@ contract CandyBox is Owned {
     struct Candy {
         address addr;
         string name;
-    }    
+    }
 
     function setPause(bool pause) public onlyOwner {
         isPause = pause;
@@ -153,8 +153,8 @@ contract CandyBox is Owned {
         string memory introduction,
         string memory link,
         uint8 order
-    ) 
-    public 
+    )
+    public
     onlyCandyManager
     {
         candays[candyIdIndex_] = Candy(addr, name);
@@ -183,21 +183,20 @@ contract CandyBox is Owned {
         string memory introduction,
         string memory link,
         uint8 order
-    ) 
-    public 
+    )
+    public
     onlyCandyManager
     {
         candays[id] = Candy(addr, name);
-        candyTotal[candyIdIndex_] = total;
-        candyOnce[candyIdIndex_] = once;
-        candyOrder[candyIdIndex_] = order;
+        candyTotal[id] = total;
+        candyOnce[id] = once;
+        candyOrder[id] = order;
 
-        candyImageUrl[candyIdIndex_] = imageUrl;
-        candyBgUrl[candyIdIndex_] = bgUrl;
-        candyTitle[candyIdIndex_] = title;
-        candyDesc[candyIdIndex_] = introduction;
-        candyLink[candyIdIndex_] = link;
-
+        candyImageUrl[id] = imageUrl;
+        candyBgUrl[id] = bgUrl;
+        candyTitle[id] = title;
+        candyDesc[id] = introduction;
+        candyLink[id] = link;
     }
 
     function delCandy(uint id) public onlyCandyManager {
@@ -214,8 +213,8 @@ contract CandyBox is Owned {
         candyIsDeleted[id] = isDeleted;
     }
     function getCandy(uint id)
-        public 
-        view 
+        public
+        view
         returns (
             address,
             string memory,
@@ -232,8 +231,8 @@ contract CandyBox is Owned {
         );
     }
     function getCandyDetail(uint _id)
-        public 
-        view 
+        public
+        view
         returns (
             string memory,
             string memory,
@@ -260,14 +259,14 @@ contract CandyBox is Owned {
         require(isPause, 'Have pause');
         require(candyIsDeleted[id] < 1, 'Have delete');
         require(candyTotal[id]- candyHasReceived[id] - candyOnce[id] >= 0, 'Candy super hair');
-        
-        
+
+
         Candy memory candy = candays[id];
         receiveNumbers[msg.sender] += 1;
-        uint lrn = (leftReceiveNumbers[msg.sender] + (now - receiveLastTime[msg.sender] + leftRecoveryTime[msg.sender]) / recoveryLimitTime) - 1;
+        uint lrn = (leftReceiveNumbers[msg.sender] + (now - receiveLastTime[msg.sender] + (recoveryLimitTime - leftRecoveryTime[msg.sender])) / recoveryLimitTime) - 1;
         lrn = lrn < 0 ? 0: lrn;
         leftReceiveNumbers[msg.sender] = lrn < maxReceiveNumber - 1 ? lrn : maxReceiveNumber - 1 ;
-        leftRecoveryTime[msg.sender] = recoveryLimitTime - (now - receiveLastTime[msg.sender] + leftRecoveryTime[msg.sender]) % recoveryLimitTime;
+        leftRecoveryTime[msg.sender] = recoveryLimitTime - (now - receiveLastTime[msg.sender] + (recoveryLimitTime - leftRecoveryTime[msg.sender])) % recoveryLimitTime;
         receiveLastTime[msg.sender] = now;
         candyHasReceived[id] = candyHasReceived[id] + candyOnce[id];
         TRC20Interface t = TRC20Interface(candy.addr);
@@ -311,6 +310,6 @@ contract CandyBox is Owned {
     }
 
     function canReceive(address addr) public view returns (bool can) {
-        return (leftReceiveNumbers[addr] + (now - receiveLastTime[addr] + leftRecoveryTime[addr]) / recoveryLimitTime) > 0;
+        return (leftReceiveNumbers[addr] + (now - receiveLastTime[addr] + (recoveryLimitTime - leftRecoveryTime[addr])) / recoveryLimitTime) > 0;
     }
 }

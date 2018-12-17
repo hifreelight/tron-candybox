@@ -9,6 +9,7 @@ import Roller from '@/components/Roller'
 import RollerRank from '@/components/sections/RollerRank.vue'
 import AdminNbaTron from '@/components/AdminNbaTron'
 import CandyList from '@/components/CandyList'
+import Permission from '@/components/Permission'
 
 Vue.use(Router)
 
@@ -61,6 +62,12 @@ export default new Router({
       path: '/admin/candy/list/',
       name: 'CandyList',
       component: CandyList,
+      meta: { view: Web3Message }
+    },
+    {
+      path: '/admin/candy/permission/',
+      name: 'Permission',
+      component: Permission,
       meta: { view: Web3Message }
     }
   ]

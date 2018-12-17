@@ -15,11 +15,29 @@ class CandyBox {
     this.contract = tronWeb.contract(cbj.abi, cbj.networks['*'].address)
   }
   async getTotal () {
+    this.setContract(window.tronWeb)
     const index = await this.contract.candyIdIndex_.call().call()
     return index - 1
   }
   addCandy (tokenAddr, name, total, once, imageUrl, bgUrl, title, introduction, link, order) {
+    this.setContract(window.tronWeb)
     return this.contract.addCandy(tokenAddr, name, total, once, imageUrl, bgUrl, title, introduction, link, order)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editCandy (id, tokenAddr, name, total, once, imageUrl, bgUrl, title, introduction, link, order) {
+    this.setContract(window.tronWeb)
+    return this.contract.editCandy(id, tokenAddr, name, total, once, imageUrl, bgUrl, title, introduction, link, order)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  async delCandy (id) {
+    this.setContract(window.tronWeb)
+    await this.contract.delCandy(id)
       .send({
         shouldPollResponse: true,
         callValue: 0
@@ -35,6 +53,48 @@ class CandyBox {
     const abi = tokenContract.abi.entrys
     const contract = this.tronWeb.contract(abi, tokenAddress)
     return await contract.balanceOf(contractAddress).call()
+  }
+  async transferCandy (tokenAddress, accountAddress, amount) {
+    return await this.contract.transferCandy(tokenAddress, accountAddress, amount)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  async setCandyManager (address) {
+    return await this.contract.setCandyManager(address)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  async transferOwnership (address) {
+    return await this.contract.transferOwnership(address)
+    .send({
+      shouldPollResponse: true,
+      callValue: 0
+    })
+  }
+  async acceptOwnership () {
+    return await this.contract.acceptOwnership()
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  async addBlacklist (address) {
+    return await this.contract.addBlacklist(address)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  async delBlacklist (address) {
+    return await this.contract.delBlacklist(address)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
   }
 }
 candyBox = new CandyBox()
