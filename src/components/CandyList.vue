@@ -82,6 +82,14 @@
         </b-row>
         <b-row>
           <b-col sm="3">
+            <label >标题</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input v-model="temp.title"  type="text" v-bind:readonly="true"></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
             <label >一句话介绍</label>
           </b-col>
           <b-col sm="9">
@@ -106,6 +114,37 @@
         </b-row>
       </b-container>
         <b-button block @click="update">更新</b-button>
+    </b-modal>
+
+    <!-- Modal Component editPubCandy-->
+    <b-modal id="editPubCandy" ref="editPubCandy" hide-footer title="修改发布糖果">
+      <b-container fluid>
+        <b-row class="my-1">
+          <b-col sm="3">
+            <label >ID</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input v-model="temp.id" type="text" v-bind:readonly="true"></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
+            <label >order</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input v-model="temp.order"  type="text" v-bind:readonly="false"></b-form-input>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col sm="3">
+            <label >是否删除</label>
+          </b-col>
+          <b-col sm="9">
+            <b-form-input v-model="temp.isDeleted"  type="text" v-bind:readonly="false"></b-form-input>
+          </b-col>
+        </b-row>
+      </b-container>
+        <b-button block @click="updatePub">更新</b-button>
     </b-modal>
 
     <!-- Modal Component receiveCandy-->
@@ -148,6 +187,7 @@
       <template slot="manager" slot-scope="data">
         <!-- <b-button>详情</b-button> -->
         <b-button @click="editCandy(data.item)">修改</b-button>
+        <b-button @click="editPubCandy(data.item)">修改发布糖果</b-button>
         <b-button @click="receiveShow(data.item)">取回糖果</b-button>
 
         <b-button v-if="data.item.isDeleted < 1" @click="delCandy(data.item)">删除</b-button>
@@ -212,6 +252,12 @@ export default {
   methods: {
     hideAddModal () {
       this.$refs.addCandy.hide()
+    },
+    hideEditModal () {
+      this.$refs.editCandy.hide()
+    },
+    hideEditPubModal () {
+      this.$refs.editPubCandy.hide()
     },
     receiveShow (record) {
       this.receive.address = record.address
@@ -284,7 +330,22 @@ export default {
       )
         .then(response => {
           console.log(response)
-          self.hideAddModal()
+          self.hideEditModal()
+          self.loading()
+        })
+    },
+    updatePub () {
+      const self = this
+      console.log(this.temp)
+      let d = this.temp
+      candyBox.editPubCandy(
+        d.id,
+        d.order,
+        d.isDeleted
+      )
+        .then(response => {
+          console.log(response)
+          self.hideEditPubModal()
           self.loading()
         })
     },
@@ -294,6 +355,10 @@ export default {
     editCandy (record) {
       this.temp = record
       this.$refs.editCandy.show()
+    },
+    editPubCandy (record) {
+      this.temp = record
+      this.$refs.editPubCandy.show()
     },
     delCandy (record) {
       const self = this

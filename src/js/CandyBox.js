@@ -28,8 +28,16 @@ class CandyBox {
       })
   }
   editCandy (id, tokenAddr, name, total, once, imageUrl, bgUrl, title, introduction, link, order) {
-    this.setContract(window.tronWeb)
+    // this.setContract(window.tronWeb)
     return this.contract.editCandy(id, tokenAddr, name, total, once, imageUrl, bgUrl, title, introduction, link, order)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editPubCandy (id, order, isDeleted) {
+    this.setContract(window.tronWeb)
+    return this.contract.editPubCandy(id, order, isDeleted)
       .send({
         shouldPollResponse: true,
         callValue: 0
