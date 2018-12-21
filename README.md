@@ -48,3 +48,34 @@ Error: Contract has not been deployed on the network
 - event
 - 用户等级 ?
 - test
+
+
+## test account
+{
+  address: {base58: "TLCZMHX1TJXB6rFofaMKMrTVs2CQvPcXKf", hex: "417037A6CFDB89B6931253E7D29AD59F951315EE73"}
+  privateKey: "76A1707E402088DE4270F8184A42A69BB0016FC179DABD952DBF5686D1780C52"
+  publicKey: "0408336FEEFE024DED809472840DD050606DAB27A785C236859737668047F7956EAEDBB284BB0830434184F4E4AF01A0A3A0A42B1E00AE3C39D6408702BE0A3CAD"
+}
+
+
+1.WIN
+TRON WIN
+基于波场生态的分红型博彩游戏平台
+2.DICE
+TRONDice
+建立在波场生态上的去中心化、高性能的电子游戏平台
+3.GOC
+GOC DEX
+Tron去中心化交易所
+
+
+TQmiz8KFpqgbWpeyisYRq5qsrp3QTpZvAc
+https://zizaiv2.oss-cn-beijing.aliyuncs.com/bettown/teamlogo/nba/WashingtonWizards.png
+
+https://www.bet.town
+
+
+GitHub
+注册邮箱：bd@bimoney.io
+密码：bimoney123456
+用户名：bimoney

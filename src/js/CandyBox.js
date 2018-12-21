@@ -10,9 +10,11 @@ class CandyBox {
     this.address = cbj.networks['*'].address
     return candyBox
   }
-  setContract (tronWeb) {
+  async setContract (tronWeb) {
     this.tronWeb = tronWeb
     this.contract = tronWeb.contract(cbj.abi, cbj.networks['*'].address)
+    console.log('this.contract is %o', this.contract)
+    console.log('account is -----------> %o', await this.tronWeb.trx.getAccount())
   }
   async getTotal () {
     this.setContract(window.tronWeb)

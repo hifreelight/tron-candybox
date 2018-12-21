@@ -10,14 +10,15 @@ module.exports = {
       feeLimit: 3 * 1e8,
       userFeePercentage: 30,
       originEnergyLimit: 3 * 1e5,
-      network_id: '*',
+      network_id: '*'
     },
 
 // TronGrid Shasta testnet
     shasta: {
 
       // Put your shasta account's private key here:
-      privateKey: '24a1a7e24a956138b0abf0a47cee816bd7180762f2c7df7167925c8c12e8dc98',
+      privateKey: '24a1a7e24a956138b0abf0a47cee816bd7180762f2c7df7167925c8c12e8dc98', // dev
+      // privateKey: '76A1707E402088DE4270F8184A42A69BB0016FC179DABD952DBF5686D1780C52', // test2
 
       // To receive trx for your shasta account go to
       // https://www.trongrid.io/shasta
@@ -28,7 +29,7 @@ module.exports = {
       feeLimit: 3 * 1e8,
       userFeePercentage: 30,
       originEnergyLimit: 3 * 1e5,
-      network_id: '*',
-    },
-  },
-};
+      network_id: '*'
+    }
+  }
+}

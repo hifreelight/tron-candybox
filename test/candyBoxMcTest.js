@@ -63,7 +63,9 @@ describe('A suite for candybox', function () {
     console.log('receive result is %o', result)
   })
   it('test my left receive number', async function () {
+    console.log('accountOwner.address is %s', accountOwner.address)
     const myNumbers = await contract.myNumbers(accountOwner.address).call()
+    // const myNumbers = await contract.myNumbers('TLCZMHX1TJXB6rFofaMKMrTVs2CQvPcXKf').call()
     console.log('myNumbers is %o', myNumbers)
   })
   it('test my lastReceiveTime', async function () {
@@ -85,5 +87,13 @@ describe('A suite for candybox', function () {
         callValue: 0
       })
     console.log('candyIndex is %o', index)
+  })
+  it('test in blacklist', async function () {
+    const bool = await contract.inBlacklist(accountOwner.address).call()
+    console.log('candyIndex is %o', bool)
+  })
+  it('test canReceive', async function () {
+    const bool = await contract.canReceive(accountOwner.address).call()
+    console.log('candyIndex is %o', bool)
   })
 })
