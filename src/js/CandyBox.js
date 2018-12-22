@@ -1,5 +1,6 @@
 
 import cbj from '../../build/contracts/CandyBox.json'
+// import { resolve } from 'dns';
 let candyBox = null
 
 class CandyBox {
@@ -11,15 +12,52 @@ class CandyBox {
     return candyBox
   }
   async setContract (tronWeb) {
-    this.tronWeb = tronWeb
-    this.contract = tronWeb.contract(cbj.abi, cbj.networks['*'].address)
-    console.log('this.contract is %o', this.contract)
-    console.log('account is -----------> %o', await this.tronWeb.trx.getAccount())
+    const self = this
+    self.tronWeb = tronWeb
+    self.contract = tronWeb.contract(cbj.abi, cbj.networks['*'].address)
+    // try {
+    //   console.log('account is -----------> %o', await self.tronWeb.trx.getAccount())
+    //   return self.contract
+    // } catch (err) {
+    //   console.error('getAccount err')
+    //   // return self.setContract(window.tronWeb)
+    //   return await setTimeout(async function () {
+    //     await self.setContract(window.tronWeb)
+    //   }, 1000)
+    // }
+
+    return new Promise(function (resolve, reject) {
+      self.tronWeb.trx.getAccount()
+        .then(account => {
+          self.contract = tronWeb.contract(cbj.abi, cbj.networks['*'].address)
+          console.log('this.contract is %o', self.contract)
+          resolve(account)
+        })
+        .catch(err => {
+          console.error('getAccount err is %o', err)
+          setTimeout(function () {
+            self.tronWeb.trx.getAccount()
+              .then(account => {
+                self.contract = tronWeb.contract(cbj.abi, cbj.networks['*'].address)
+                console.log('this.contract is %o', self.contract)
+                console.log('account is %o', account)
+                resolve(account)
+              })
+              .catch(err => {
+                reject(err)
+              })
+          }, 100)
+        })
+    })
   }
   async getTotal () {
-    this.setContract(window.tronWeb)
-    const index = await this.contract.candyIdIndex_.call().call()
-    return index - 1
+    await this.setContract(window.tronWeb)
+    try {
+      return await this.contract.candyIdIndex_.call().call() - 1
+    } catch (err) {
+      console.error('getTotal err')
+      // return 0
+    }
   }
   addCandy (tokenAddr, name, total, once, imageUrl, bgUrl, title, introduction, link, order) {
     this.setContract(window.tronWeb)
