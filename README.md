@@ -48,6 +48,7 @@ Error: Contract has not been deployed on the network
 - event
 - 用户等级 ?
 - test
+- 糖果信息分开编辑
 
 
 ## test account

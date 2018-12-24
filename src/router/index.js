@@ -19,7 +19,7 @@ export default new Router({
     {
       path: '/',
       name: 'Root',
-      component: Home,
+      component: CandyList,
       meta: { view: Web3Message }
     },
     {

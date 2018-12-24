@@ -1,6 +1,6 @@
-'use strict';
-var CandyBox = artifacts.require('./CandyBox.sol');
+'use strict'
+var FxtToken = artifacts.require('./FxtToken.sol')
 
-module.exports = function(deployer) {
-  deployer.deploy(CandyBox);
-};
+module.exports = function (deployer) {
+  deployer.deploy(FxtToken)
+}

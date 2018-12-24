@@ -203,15 +203,39 @@ contract CandyBox is Owned {
         candyIsDeleted[id] = 1;
     }
 
-    function editCandy(uint id, string memory name, string memory introduction, uint256 once) public onlyCandyManager() {
-        candays[id].name = name;
-        candyDesc[id] = introduction;
-        candyOnce[id] = once;
-    }
     function editPubCandy(uint id, uint8 order, uint8 isDeleted) public onlyCandyManager() {
         candyOrder[id] = order;
         candyIsDeleted[id] = isDeleted;
     }
+
+    function editAddress(uint id, address addr) public onlyCandyManager() {
+        candays[id].addr = addr;
+    }
+    function editName(uint id, string memory name) public onlyCandyManager() {
+        candays[id].name = name;
+    }
+    function editTotal(uint id, uint256 total) public onlyCandyManager() {
+        candyTotal[id] = total;
+    }
+    function editOnce(uint id, uint256 once) public onlyCandyManager() {
+        candyOnce[id] = once;
+    }
+    function editImageUrl(uint id, string memory imageUrl) public onlyCandyManager() {
+        candyImageUrl[id] = imageUrl;
+    }
+    function editBgUrl(uint id, string memory bgUrl) public onlyCandyManager() {
+        candyBgUrl[id] = bgUrl;
+    }
+    function editTitle(uint id, string memory title) public onlyCandyManager() {
+        candyTitle[id] = title;
+    }
+    function editIntroduction(uint id, string memory introduction) public onlyCandyManager() {
+        candyDesc[id] = introduction;
+    }
+    function editLink(uint id, string memory link) public onlyCandyManager() {
+        candyLink[id] = link;
+    }
+
     function getCandy(uint id)
         public
         view

@@ -28,7 +28,7 @@
           <b-col sm="3">
             <label >ID</label>
           </b-col>
-          <b-col sm="9">
+          <b-col sm="6">
             <b-form-input v-model="temp.id" type="text" v-bind:readonly="true"></b-form-input>
           </b-col>
         </b-row>
@@ -36,7 +36,7 @@
           <b-col sm="3">
             <label >糖果地址</label>
           </b-col>
-          <b-col sm="9">
+          <b-col sm="6">
             <b-form-input v-model="temp.address"  type="text" v-bind:readonly="true"></b-form-input>
           </b-col>
         </b-row>
@@ -44,76 +44,85 @@
           <b-col sm="3">
             <label >糖果名称</label>
           </b-col>
-          <b-col sm="9">
+          <b-col sm="6">
             <b-form-input v-model="temp.name"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('name')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >糖果总量</label>
           </b-col>
-          <b-col sm="9">
-            <b-form-input v-model="temp.total"  type="text" v-bind:readonly="true"></b-form-input>
+          <b-col sm="6">
+            <b-form-input v-model="temp.total"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('total')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >每次领取</label>
           </b-col>
-          <b-col sm="9">
+          <b-col sm="6">
             <b-form-input v-model="temp.once"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('once')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >图标URL</label>
           </b-col>
-          <b-col sm="9">
-            <b-form-input v-model="temp.imageUrl"  type="text" v-bind:readonly="true"></b-form-input>
+          <b-col sm="6">
+            <b-form-input v-model="temp.imageUrl"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('imageUrl')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >背景URL</label>
           </b-col>
-          <b-col sm="9">
-            <b-form-input v-model="temp.bgUrl"  type="text" v-bind:readonly="true"></b-form-input>
+          <b-col sm="6">
+            <b-form-input v-model="temp.bgUrl"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('bgUrl')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >标题</label>
           </b-col>
-          <b-col sm="9">
-            <b-form-input v-model="temp.title"  type="text" v-bind:readonly="true"></b-form-input>
+          <b-col sm="6">
+            <b-form-input v-model="temp.title"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('title')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >一句话介绍</label>
           </b-col>
-          <b-col sm="9">
-            <b-form-input v-model="temp.introduction"  type="text" v-bind:readonly="true"></b-form-input>
+          <b-col sm="6">
+            <b-form-input v-model="temp.introduction"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('introduction')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >空投页面链接</label>
           </b-col>
-          <b-col sm="9">
-            <b-form-input v-model="temp.link"  type="text" v-bind:readonly="true"></b-form-input>
+          <b-col sm="6">
+            <b-form-input v-model="temp.link"  type="text" v-bind:readonly="false"></b-form-input>
           </b-col>
+          <b-col sm="3"><b-button block @click="update('link')">更新</b-button></b-col>
         </b-row>
         <b-row>
           <b-col sm="3">
             <label >order</label>
           </b-col>
-          <b-col sm="9">
-            <b-form-input v-model="temp.order"  type="text" v-bind:readonly="false"></b-form-input>
+          <b-col sm="6">
+            <b-form-input v-model="temp.order"  type="text" v-bind:readonly="true"></b-form-input>
           </b-col>
+          <b-col sm="3"></b-col>
         </b-row>
       </b-container>
-        <b-button block @click="update">更新</b-button>
+        <!-- <b-button block @click="update">更新</b-button> -->
     </b-modal>
 
     <!-- Modal Component editPubCandy-->
@@ -312,7 +321,77 @@ export default {
           self.loading()
         })
     },
-    update () {
+    update (attr) {
+      const self = this
+      let d = this.temp
+      switch (attr) {
+        case 'name':
+          candyBox.editName(d.id, d.name)
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+        case 'total':
+          candyBox.editTotal(d.id, new BigNumber(d.total).times(1e6).toNumber())
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+        case 'once':
+          candyBox.editOnce(d.id, new BigNumber(d.once).times(1e6).toNumber())
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+        case 'imageUrl':
+          candyBox.editImageUrl(d.id, d.imageUrl)
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+        case 'bgUrl':
+          candyBox.editBgUrl(d.id, d.bgUrl)
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+        case 'title':
+          candyBox.editTitle(d.id, d.title)
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+        case 'introduction':
+          candyBox.editIntroduction(d.id, d.introduction)
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+        case 'link':
+          candyBox.editLink(d.id, d.link)
+            .then(response => {
+              console.log(response)
+              self.hideEditModal()
+              self.loading()
+            })
+          break
+      }
+    },
+    updateAll () {
       console.log(this.temp)
       let d = this.temp
       candyBox.editCandy(

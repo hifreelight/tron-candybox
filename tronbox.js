@@ -26,7 +26,7 @@ module.exports = {
 
       consume_user_resource_percent: 30,
       fullHost: 'https://api.shasta.trongrid.io',
-      feeLimit: 3 * 1e8,
+      feeLimit: 4 * 1e8,
       userFeePercentage: 30,
       originEnergyLimit: 3 * 1e5,
       network_id: '*'

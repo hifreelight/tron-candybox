@@ -75,6 +75,63 @@ class CandyBox {
         callValue: 0
       })
   }
+  editName (id, name) {
+    return this.contract.editName(id, name)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editTotal (id, total) {
+    return this.contract.editTotal(id, total)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editOnce (id, once) {
+    return this.contract.editOnce(id, once)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editImageUrl (id, imageUrl) {
+    return this.contract.editImageUrl(id, imageUrl)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editBgUrl (id, bgUrl) {
+    return this.contract.editBgUrl(id, bgUrl)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editTitle (id, title) {
+    return this.contract.editTitle(id, title)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editIntroduction (id, introduction) {
+    return this.contract.editIntroduction(id, introduction)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+  editLink (id, link) {
+    return this.contract.editLink(id, link)
+      .send({
+        shouldPollResponse: true,
+        callValue: 0
+      })
+  }
+
   editPubCandy (id, order, isDeleted) {
     this.setContract(window.tronWeb)
     return this.contract.editPubCandy(id, order, isDeleted)
