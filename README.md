@@ -78,5 +78,5 @@ https://www.bet.town
 
 GitHub
 注册邮箱：bd@bimoney.io
-密码：bimoney123456
-用户名：bimoney
+密码：bimoney12yanwu3456
+用户名：bimoney-yanwu
