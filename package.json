@@ -26,7 +26,7 @@
     "ethereum-blockies": "^0.1.1",
     "gravatar-api": "^1.5.0",
     "jquery": "^3.3.1",
-    "moment": "^2.23.0",
+    "moment": "^2.29.4",
     "tronweb": "^2.1.14",
     "vue": "^2.5.3",
     "vue-router": "^2.8.1",
